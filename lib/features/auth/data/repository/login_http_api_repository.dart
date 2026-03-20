@@ -1,6 +1,6 @@
 import 'package:movie_app_bloc/core/config/app_url.dart';
 import 'package:movie_app_bloc/core/network/network_services_api.dart';
-import 'package:movie_app_bloc/features/auth/data/models/user/user_model.dart';
+import 'package:movie_app_bloc/features/auth/data/models/user_model.dart';
 import 'package:movie_app_bloc/features/auth/data/repository/login_repository.dart';
 
 class LoginHttpApiRepository implements LoginRepository {

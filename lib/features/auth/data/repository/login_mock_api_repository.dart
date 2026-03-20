@@ -1,4 +1,4 @@
-import 'package:movie_app_bloc/features/auth/data/models/user/user_model.dart';
+import 'package:movie_app_bloc/features/auth/data/models/user_model.dart';
 import 'package:movie_app_bloc/features/auth/data/repository/login_repository.dart';
 
 class LoginMockApiRepository implements LoginRepository {
