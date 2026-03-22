@@ -57,20 +57,18 @@ class _MovieScreenState extends State<MovieScreen> {
 
         final tvShows = state.popularMoviesList.data!.tvShow;
 
-        return Expanded(
-          child: GridView.builder(
-            padding: const EdgeInsets.all(16.0),
-            itemCount: tvShows.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 6,
-              mainAxisSpacing: 6,
-              childAspectRatio: 0.5,
-            ),
-            itemBuilder: (context, index) {
-              return MovieItemCard(show: tvShows[index]);
-            },
+        return GridView.builder(
+          padding: const EdgeInsets.all(16.0),
+          itemCount: tvShows.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 6,
+            mainAxisSpacing: 6,
+            childAspectRatio: 0.5,
           ),
+          itemBuilder: (context, index) {
+            return MovieItemCard(show: tvShows[index]);
+          },
         );
 
       default:
