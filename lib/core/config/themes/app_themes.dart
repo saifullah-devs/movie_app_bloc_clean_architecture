@@ -53,14 +53,11 @@ class AppTheme {
     elevation: 0, // Industry standard: Flat app bars
     centerTitle: true,
     iconTheme: const IconThemeData(color: Colors.white, size: 24),
-    actionsIconTheme: const IconThemeData(color: AppColors.whiteColor),
     titleTextStyle: GoogleFonts.poppins(
       fontSize: 20,
       fontWeight: FontWeight.w600,
-      color: Colors.white,
       letterSpacing: 1.2,
     ),
-    surfaceTintColor: Colors.transparent,
   );
 
   static final InputDecorationTheme _inputTheme = InputDecorationTheme(

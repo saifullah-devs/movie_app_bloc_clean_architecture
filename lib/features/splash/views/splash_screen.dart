@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app_bloc/core/utils/loading_widget.dart';
 import 'package:movie_app_bloc/features/splash/services/splash_services.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -20,7 +21,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue,
       body: SafeArea(
         child: Center(
           child: Column(
@@ -29,12 +29,10 @@ class _SplashScreenState extends State<SplashScreen> {
             children: [
               Text(
                 'Splash Screen',
-                style: Theme.of(
-                  context,
-                ).textTheme.headlineMedium?.copyWith(color: Colors.white),
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
               const SizedBox(height: 20),
-              const CircularProgressIndicator(color: Colors.white),
+              const LoadingWidget(size: 20),
             ],
           ),
         ),
