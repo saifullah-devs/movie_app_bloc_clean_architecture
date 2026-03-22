@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app_bloc/features/auth/presentation/bloc/login_bloc.dart';
-import 'package:movie_app_bloc/core/utils/validations.dart';
+import 'package:movie_app_bloc/core/utils/validations_mixin.dart';
 
 class PasswordInputWidget extends StatelessWidget {
   final FocusNode passwordFocusNode;
@@ -27,12 +27,7 @@ class PasswordInputWidget extends StatelessWidget {
               LoginPasswordChanged(password: value),
             );
           },
-          validator: (value) {
-            if (!Validations.isValidPassword(value ?? '')) {
-              return 'Please enter a valid password (at least 6 characters)';
-            }
-            return null;
-          },
+          validator: (value) => ValidationMixin.validatePassword(value ?? ''),
         );
       },
     );

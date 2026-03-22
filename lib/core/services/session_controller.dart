@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/widgets.dart';
-import 'package:movie_app_bloc/core/services/services_locator.dart';
-import 'package:movie_app_bloc/core/storage/local_storage.dart';
 import 'package:movie_app_bloc/features/auth/data/models/user_model.dart';
+import '../../dependency_injection.dart';
+import '../storage/local_storage.dart';
 
 class SessionController {
   static final SessionController _instance = SessionController._internal();

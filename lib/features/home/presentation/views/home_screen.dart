@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app_bloc/core/config/routes/routes_name.dart';
-import 'package:movie_app_bloc/core/services/services_locator.dart';
+import 'package:movie_app_bloc/dependency_injection.dart';
 import 'package:movie_app_bloc/core/services/session_controller.dart';
 import 'package:movie_app_bloc/features/home/presentation/views/widgets/popular_tvshow_list_widget.dart';
 
@@ -12,8 +12,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // ✅ Deleted _moviesBloc and initState! The screen doesn't need them anymore!
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      // ✅ Deleted BlocProvider wrapper!
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),

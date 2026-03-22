@@ -1,4 +1,4 @@
-import 'package:movie_app_bloc/core/config/app_url.dart';
+import 'package:movie_app_bloc/core/constaints/app_url.dart';
 import 'package:movie_app_bloc/core/network/network_services_api.dart';
 import 'package:movie_app_bloc/features/movies/data/models/movie_list_model.dart';
 

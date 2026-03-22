@@ -7,80 +7,91 @@ import 'package:movie_app_bloc/core/exceptions/app_exceptions.dart';
 import 'package:movie_app_bloc/core/network/base_api_services.dart';
 
 class NetworkServicesApi implements BaseApiServices {
+  static const int _defaultTimeout = 15;
+
+  Map<String, String> _getHeaders() => {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  };
+
   @override
   Future<dynamic> getApi(String url) async {
-    dynamic jsonResponse;
-    try {
-      final response = await http
-          .get(Uri.parse(url))
-          .timeout(const Duration(seconds: 10));
-
-      jsonResponse = returnResponse(response);
-      return jsonResponse;
-    } on SocketException {
-      throw NoInternetException('');
-    } on TimeoutException {
-      throw FetchDataException('');
-    }
+    return _processRequest(
+      () => http.get(Uri.parse(url), headers: _getHeaders()),
+    );
   }
 
   @override
   Future<dynamic> postApi(String url, dynamic data) async {
-    dynamic jsonResponse;
-    try {
-      final response = await http
-          .post(
-            Uri.parse(url),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode(data),
-          )
-          .timeout(const Duration(seconds: 10));
-      jsonResponse = returnResponse(response);
-      return jsonResponse;
-    } on SocketException {
-      throw NoInternetException('');
-    } on TimeoutException {
-      throw FetchDataException('');
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  dynamic returnResponse(http.Response response) {
-    switch (response.statusCode) {
-      case 200:
-        return jsonDecode(response.body);
-      case 400:
-        throw RequestException('Bad request: ${response.body}');
-      case 401:
-        dynamic jsonResponse = jsonDecode(response.body);
-        String errorMessage = jsonResponse['error'] ?? 'Unauthorized access';
-        throw UnauthorisedException(errorMessage);
-      case 403:
-        throw UnauthorisedException('Unauthorized access: ${response.body}');
-      case 500:
-        throw FetchDataException(
-          'Error occurred with status code: ${response.statusCode.toString()}',
-        );
-      default:
-        throw FetchDataException(
-          'Error occurred with status code: ${response.statusCode.toString()}',
-        );
-    }
+    return _processRequest(
+      () => http.post(
+        Uri.parse(url),
+        headers: _getHeaders(),
+        body: jsonEncode(data),
+      ),
+    );
   }
 
   @override
-  Future deleteApi(String url) async {
+  Future<dynamic> deleteApi(String url) async {
+    return _processRequest(
+      () => http.delete(Uri.parse(url), headers: _getHeaders()),
+    );
+  }
+
+  Future<dynamic> _processRequest(
+    Future<http.Response> Function() httpRequest,
+  ) async {
     try {
-      return await http
-          .delete(Uri.parse(url))
-          .timeout(const Duration(seconds: 10));
+      final response = await httpRequest().timeout(
+        const Duration(seconds: _defaultTimeout),
+      );
+      return _returnResponse(response);
     } on SocketException {
-      throw NoInternetException('');
+      throw NetworkException('Check your data or Wi-Fi connection.');
     } on TimeoutException {
-      throw FetchDataException('');
+      throw DataParsingException('Server took too long to respond.');
+    } on FormatException {
+      throw DataParsingException('Bad response format from server.');
     } catch (e) {
-      throw Exception('Failed to delete data: $e');
+      // Catch-all for unexpected system errors
+      throw DataParsingException('Unexpected error: ${e.toString()}');
     }
+  }
+
+  /// Detailed Response Switch
+  dynamic _returnResponse(http.Response response) {
+    final responseData = response.body.isNotEmpty
+        ? jsonDecode(response.body)
+        : {};
+
+    switch (response.statusCode) {
+      case 200:
+      case 201:
+        return responseData;
+      case 400:
+        throw BadRequestException(
+          _extractMessage(responseData, 'Invalid Request'),
+        );
+      case 401:
+      case 403:
+        throw UnauthorisedException(
+          _extractMessage(responseData, 'Unauthorized Access'),
+        );
+      case 404:
+        throw BadRequestException('Resource not found (404)');
+      case 500:
+        throw DataParsingException('Internal Server Error. Please try later.');
+      default:
+        throw DataParsingException(
+          'Error ${response.statusCode}: ${response.reasonPhrase}',
+        );
+    }
+  }
+
+  String _extractMessage(dynamic json, String defaultMsg) {
+    if (json is Map && json.containsKey('message')) return json['message'];
+    if (json is Map && json.containsKey('error')) return json['error'];
+    return defaultMsg;
   }
 }

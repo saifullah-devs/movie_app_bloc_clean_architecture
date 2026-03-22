@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app_bloc/features/auth/presentation/bloc/login_bloc.dart';
-import 'package:movie_app_bloc/core/utils/validations.dart';
+import 'package:movie_app_bloc/core/utils/validations_mixin.dart';
 
 class EmailInputWidget extends StatelessWidget {
   final FocusNode emailFocusNode;
@@ -23,13 +23,8 @@ class EmailInputWidget extends StatelessWidget {
           onChanged: (value) {
             context.read<LoginBloc>().add(LoginEmailChanged(email: value));
           },
-
-          validator: (value) {
-            if (!Validations.isValidEmail(value ?? '')) {
-              return 'Please enter a valid email';
-            }
-            return null;
-          },
+          validator: (value) =>
+              ValidationMixin.validateRequired(value, 'Email'),
         );
       },
     );

@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:movie_app_bloc/core/services/services_locator.dart';
+import 'package:movie_app_bloc/dependency_injection.dart';
 import 'package:movie_app_bloc/core/services/session_controller.dart';
 import 'package:movie_app_bloc/features/auth/data/repository/login_repository.dart';
 import 'package:movie_app_bloc/core/utils/enum.dart';

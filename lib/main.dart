@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app_bloc/core/config/routes/routes.dart';
 import 'package:movie_app_bloc/core/config/routes/routes_name.dart';
-import 'package:movie_app_bloc/core/services/services_locator.dart';
+import 'package:movie_app_bloc/core/config/themes/app_themes.dart';
+import 'package:movie_app_bloc/dependency_injection.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +20,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       themeMode: ThemeMode.dark,
-      theme: ThemeData.dark(),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
       debugShowCheckedModeBanner: false,
       initialRoute: RoutesName.splashScreen,
       onGenerateRoute: Routes.generateRoute,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movie_app_bloc/core/components/internet_exception_widget.dart';
-import 'package:movie_app_bloc/core/components/movie_item_card.dart';
+import 'package:movie_app_bloc/core/utils/internet_exception_widget.dart';
+import 'package:movie_app_bloc/features/movies/presentation/widgets/movie_item_card.dart';
 import 'package:movie_app_bloc/core/utils/enum.dart';
 import 'package:movie_app_bloc/features/movies/presentation/bloc/movies_bloc.dart';
 
@@ -26,7 +26,8 @@ class PopularTvshowListWidget extends StatelessWidget {
               );
 
             case GetApiStatus.error:
-              if (state.popularMoviesList.message == '') {
+              if (state.popularMoviesList.message ==
+                  'Network Error: Check your data or Wi-Fi connection.') {
                 return InterNetExceptionWidget(
                   onPress: () {
                     context.read<MoviesBloc>().add(PopularMoviesFetched());

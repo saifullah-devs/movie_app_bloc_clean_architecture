@@ -1,4 +1,4 @@
-import 'package:movie_app_bloc/core/utils/enum.dart';
+import '../utils/enum.dart';
 
 class ApiResponse<T> {
   final GetApiStatus status;

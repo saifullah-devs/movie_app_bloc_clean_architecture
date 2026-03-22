@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:movie_app_bloc/core/response/api_response.dart';
-import 'package:movie_app_bloc/core/services/services_locator.dart';
+import 'package:movie_app_bloc/dependency_injection.dart';
 import 'package:movie_app_bloc/features/movies/data/models/movie_list_model.dart';
 import 'package:movie_app_bloc/features/movies/data/repository/movies_repository.dart';
 part 'movies_event.dart';

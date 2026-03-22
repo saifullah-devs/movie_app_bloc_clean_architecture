@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movie_app_bloc/core/components/movie_item_card.dart';
+import 'package:movie_app_bloc/features/movies/presentation/widgets/movie_item_card.dart';
 import 'package:movie_app_bloc/core/utils/enum.dart';
 import 'package:movie_app_bloc/features/movies/presentation/bloc/movies_bloc.dart';
-import 'package:movie_app_bloc/features/movies/presentation/views/widgets/navigation_widget.dart';
+import 'package:movie_app_bloc/features/movies/presentation/widgets/navigation_widget.dart';
 
 class MovieScreen extends StatefulWidget {
   final String sortMode;
@@ -57,18 +57,20 @@ class _MovieScreenState extends State<MovieScreen> {
 
         final tvShows = state.popularMoviesList.data!.tvShow;
 
-        return GridView.builder(
-          padding: const EdgeInsets.all(16.0),
-          itemCount: tvShows.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 6,
-            mainAxisSpacing: 6,
-            childAspectRatio: 0.5,
+        return Expanded(
+          child: GridView.builder(
+            padding: const EdgeInsets.all(16.0),
+            itemCount: tvShows.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 6,
+              mainAxisSpacing: 6,
+              childAspectRatio: 0.5,
+            ),
+            itemBuilder: (context, index) {
+              return MovieItemCard(show: tvShows[index]);
+            },
           ),
-          itemBuilder: (context, index) {
-            return MovieItemCard(show: tvShows[index]);
-          },
         );
 
       default:

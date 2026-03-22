@@ -1,32 +1,48 @@
 class AppExceptions implements Exception {
-  final String _message;
-  final String _prefix;
-  AppExceptions(this._message, this._prefix);
+  final String message;
+  final String? prefix;
+  final int? statusCode;
+
+  AppExceptions({required this.message, this.prefix, this.statusCode});
+
   @override
-  String toString() {
-    return '$_prefix$_message';
-  }
+  String toString() => "${prefix ?? ''}$message";
 }
 
-class NoInternetException extends AppExceptions {
-  NoInternetException([String? message])
+/// Thrown when the server returns a 400 range error
+class BadRequestException extends AppExceptions {
+  BadRequestException([String? message, int? statusCode])
     : super(
-        message ?? 'No internet connection available.',
-        'No Internet Exception: ',
+        message: message ?? 'Invalid request parameters.',
+        prefix: 'Bad Request: ',
+        statusCode: statusCode,
       );
 }
 
+/// Thrown when the server returns a 401 or 403
 class UnauthorisedException extends AppExceptions {
-  UnauthorisedException([String? message])
-    : super(message ?? 'Unauthorized access.', 'Unauthorized Exception: ');
+  UnauthorisedException([String? message, int? statusCode])
+    : super(
+        message: message ?? 'Access denied. Please login again.',
+        prefix: 'Unauthorized: ',
+        statusCode: statusCode,
+      );
 }
 
-class RequestException extends AppExceptions {
-  RequestException([String? message])
-    : super(message ?? 'Request failed.', 'Request Exception: ');
+/// Thrown during socket or connection timeouts
+class NetworkException extends AppExceptions {
+  NetworkException([String? message])
+    : super(
+        message: message ?? 'No internet connection or server unreachable.',
+        prefix: 'Network Error: ',
+      );
 }
 
-class FetchDataException extends AppExceptions {
-  FetchDataException([String? message])
-    : super(message ?? 'Failed to fetch data.', 'Fetch Data Exception: ');
+/// Internal parsing errors (e.g., JSON mismatch)
+class DataParsingException extends AppExceptions {
+  DataParsingException([String? message])
+    : super(
+        message: message ?? 'Failed to process data from the server.',
+        prefix: 'Parsing Error: ',
+      );
 }
