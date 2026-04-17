@@ -1,55 +1,77 @@
-# Flutter BLoC TV Shows App
+# 🎬 CineFlow: Enterprise-Grade Flutter TV Show Platform
 
-A modern, scalable Flutter application that fetches and displays popular TV shows using the [Episodate API](https://www.episodate.com/api). This project demonstrates production-level state management, clean data plumbing, and dynamic routing.
+A high-performance, scalable Flutter application built with **Clean Architecture** and **BLoC**. This project serves as a showcase of industrial-standard software engineering, featuring a robust network layer, cross-platform adaptivity, and a focus on maintainable code.
+
+## 🚀 Key Architectural Highlights
+
+* **Clean Architecture (Feature-First):** Strict separation of layers (Domain, Data, Presentation) to ensure the codebase is testable and scalable.
+* **Advanced BLoC State Management:** Implementation of independent BLoC instances to prevent UI cross-contamination, utilizing `buildWhen` and `Equatables` to optimize rendering performance.
+* **Native Environment Security:** Implements **Compile-time Variables (`--dart-define`)** for secure API key management, following the standards of "Real-World Flutter."
+* **Adaptive UI Engine:** A unified codebase that delivers a native feel across **iOS (Cupertino)**, **Android (Material 3)**, and **Flutter Web**.
+* **Robust Network Layer:** A custom-built HTTP service with a dedicated Exception Handler, automatic JSON decoding, and integrated timeout/retry logic.
 
 ## ✨ Features
 
-* **Advanced State Management:** Utilizes `flutter_bloc` with a focus on "State Isolation". Independent UI components (like horizontal lists) manage their own BLoC instances to prevent cross-contamination of data and ensure smooth UI rendering.
-* **Dynamic Pagination:** Includes a fully paginated `GridView` for browsing the entire catalog of shows with dynamic "Previous" and "Next" state handling.
-* **Web & Mobile Ready:** Fully responsive design that works seamlessly on iOS, Android, and Flutter Web.
-* **Robust Data Modeling:** Uses `freezed` and `json_serializable` for highly resilient, crash-proof API parsing (handling `null` values and dynamic JSON keys gracefully).
-* **Deep Linking / Dynamic Routing:** Custom URL parsing (`Uri.parse`) allows for web-friendly routes like `/movies?sort=popular&page=2`.
-
-## Screenshots
-
-| Login Screen | Home Screen | Grid View (Paginated) |
-| :---: | :---: | :---: |
-| <img src="./images/screenshots/login_screenshot.png" width="200"> | <img src="./images/screenshots/home_screenshot.png" width="200"> | <img src="./images/screenshots/grid_screenshot.png" width="200"> |
+* **Dynamic Path Routing:** Implements RESTful URL structures (e.g., `/tv-show-details/the-flash`) for SEO-friendly web navigation and deep-linking.
+* **Intelligent Pagination:** Fully paginated `GridView` with state-aware navigation (Prev/Next) and "smart loading" indicators.
+* **Hero Motion Design:** Cinematic transitions between the catalog and detail views using the Flutter Hero framework.
+* **Responsive Layouts:** Utilizes `ConstrainedBox` and `Sliver` layouts to provide an optimal viewing experience on ultra-wide web monitors and mobile screens alike.
+* **Design System:** A comprehensive 15-style `TextTheme` using Google Fonts (Poppins), fully supporting **Dynamic Dark & Light Modes**.
 
 ## 🛠 Tech Stack
 
-* **Framework:** [Flutter](https://flutter.dev/)
-* **State Management:** [flutter_bloc](https://pub.dev/packages/flutter_bloc) & [equatable](https://pub.dev/packages/equatable)
-* **Data Models:** [freezed](https://pub.dev/packages/freezed) & [json_annotation](https://pub.dev/packages/json_annotation)
-* **Networking:** Standard `http` / Custom Network Services API
-* **Image Caching:** [cached_network_image](https://pub.dev/packages/cached_network_image)
-* **Dependency Injection:** [get_it](https://pub.dev/packages/get_it) (Service Locator)
+* **State Management:** [flutter_bloc](https://pub.dev/packages/flutter_bloc) (Event-driven architecture)
+* **Architecture:** Clean Architecture + [get_it](https://pub.dev/packages/get_it) (Service Locator)
+* **Networking:** [http](https://pub.dev/packages/http) with a custom BaseApiService wrapper
+* **UI/UX:** [cached_network_image](https://pub.dev/packages/cached_network_image), Google Fonts, and Adaptive Icons
+* **Tools:** Environment-specific launch configurations (`launch.json`) for CORS-disabled web debugging.
 
-## 🏗 Architecture & Folder Structure
-
-This application strictly follows **Feature-First Clean Architecture**, separating the UI from the business logic and data layers.
+## 🏗 Project Structure
 
 ```text
 lib/
- ┣ core/                # Shared utilities, configurations, and base classes
- ┃ ┣ components/        # Reusable global widgets (e.g., Exceptions, Loaders)
- ┃ ┣ config/            # App routing, colors, and AppUrl definitions
- ┃ ┣ exceptions/        # Custom network and app exception handling
- ┃ ┣ network/           # Base API clients and HTTP services
- ┃ ┣ response/          # Generic ApiResponse wrappers (Loading, Completed, Error)
- ┃ ┣ services/          # Dependency injection (get_it) & Session Controllers
- ┃ ┣ storage/           # Local storage management
- ┃ ┗ utils/             # Global enums and helper functions
- ┗ features/            # Independent, self-contained app features
-   ┣ auth/              # Authentication (Login)
-   ┃ ┣ data/            # Models and Repository implementations
-   ┃ ┗ presentation/    # BLoCs, Events, States, and UI Views
-   ┣ home/              # Main dashboard
-   ┃ ┣ data/
-   ┃ ┗ presentation/
-   ┣ movies/            # TV Shows catalog and pagination
-   ┃ ┣ data/            # Freezed models and Episodate API repositories
-   ┃ ┗ presentation/    # Grid views, list views, and Movie BLoCs
-   ┗ splash/            # App initialization screen
-     ┗ presentation/    # Splash View
+ ┣ core/                 # Shared logic & infrastructure
+ ┃ ┣ config/             # Routes, Theme, and Env handling
+ ┃ ┣ constaints/         # App constants & API Endpoints
+ ┃ ┣ exceptions/         # Custom error mapping
+ ┃ ┣ network/            # HTTP clients & Network Service
+ ┃ ┣ response/           # API Response wrappers
+ ┃ ┣ storage/            # Local preferences/Hive/Secure Storage
+ ┃ ┗ utils/              # Extensions & Enums
+ ┣ features/             # Business Logic & UI (The Core of the App)
+ ┃ ┣ tv_show/            # TV Show Feature
+ ┃ ┃ ┣ data/             # Models, Data Sources & Repo Impl
+ ┃ ┃ ┣ domain/           # Entities, Repositories (Abstract) & USECASES
+ ┃ ┃ ┗ presentation/     # BLoCs, Pages, & Widgets
+ ┃ ┣ auth/               # Authentication Feature
+ ┃ ┗ splash/             # Startup Logic
+ ┣ dependency_injection.dart # GetIt service locator
+ ┗ main.dart             # App Entry point
 ```
+
+## ⚙️ Configuration & Installation
+
+### Environment Variables
+
+This project uses `--dart-define` for security. To run with a custom API key:
+
+```bash
+flutter run --dart-define=API_KEY=your_key_here
+```
+
+### Web Development (CORS)
+
+For testing on Flutter Web, use the provided VS Code launch configuration or run:
+
+```bash
+flutter run -d chrome --web-browser-flag "--disable-web-security"
+```
+
+## 📈 Engineering Growth Tracker
+
+* [x] Refactored from hardcoded strings to a centralized **Design System**.
+* [x] Implemented **Hero Animations** for professional-grade UX.
+* [x] Solved **CORS restrictions** for cross-platform web deployment.
+
+---
+**Developed by Saif Ullah** *Software Developer specializing in high-performance Flutter architectures.*
