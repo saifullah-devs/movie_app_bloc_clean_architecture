@@ -3,33 +3,61 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app_bloc/features/auth/presentation/bloc/login_bloc.dart';
 import 'package:movie_app_bloc/core/utils/validations_mixin.dart';
 
-class PasswordInputWidget extends StatelessWidget {
+class PasswordInputWidget extends StatefulWidget {
   final FocusNode passwordFocusNode;
   const PasswordInputWidget({super.key, required this.passwordFocusNode});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(
-      buildWhen: (previous, current) => previous.password != current.password,
+  State<PasswordInputWidget> createState() => _PasswordInputWidgetState();
+}
 
-      builder: (context, state) {
-        return TextFormField(
-          initialValue: state.password,
-          keyboardType: TextInputType.visiblePassword,
-          focusNode: passwordFocusNode,
-          decoration: const InputDecoration(
-            labelText: 'Password',
-            border: OutlineInputBorder(),
+class _PasswordInputWidgetState extends State<PasswordInputWidget> {
+  late TextEditingController _controller;
+  bool _obscureText = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(
+      text: context.read<LoginBloc>().state.password,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<LoginBloc, LoginState>(
+      listenWhen: (previous, current) =>
+          previous.password != current.password &&
+          current.password != _controller.text,
+      listener: (context, state) => _controller.text = state.password,
+      child: TextFormField(
+        controller: _controller,
+        keyboardType: TextInputType.visiblePassword,
+        focusNode: widget.passwordFocusNode,
+        obscureText: _obscureText,
+        decoration: InputDecoration(
+          labelText: 'Password',
+          hintText: 'emilyspass',
+
+          prefixIcon: const Icon(Icons.lock_outline),
+          border: const OutlineInputBorder(),
+          suffixIcon: IconButton(
+            icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility),
+            onPressed: () => setState(() => _obscureText = !_obscureText),
           ),
-          obscureText: true,
-          onChanged: (value) {
-            context.read<LoginBloc>().add(
-              LoginPasswordChanged(password: value),
-            );
-          },
-          validator: (value) => ValidationMixin.validatePassword(value ?? ''),
-        );
-      },
+        ),
+        onChanged: (value) {
+          context.read<LoginBloc>().add(PasswordChanged(value));
+        },
+        validator: (value) =>
+            ValidationMixin.validateRequired(value, 'Password'),
+      ),
     );
   }
 }

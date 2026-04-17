@@ -1,30 +1,46 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../domain/entities/user_entity.dart';
 
-part 'user_model.freezed.dart';
-part 'user_model.g.dart';
+class UserModel extends UserEntity {
+  const UserModel({
+    super.id,
+    super.username,
+    super.email,
+    super.accessToken,
+    super.refreshToken,
+    super.message,
+  });
 
-@freezed
-sealed class UserModel with _$UserModel {
-  const UserModel._();
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['id'] as int? ?? -1,
+      username: json['username'] as String? ?? '',
+      email: json['email'] as String? ?? '',
+      accessToken: json['accessToken'] as String? ?? '',
+      refreshToken: json['refreshToken'] as String? ?? '',
+      message: json['message'] as String? ?? '',
+    );
+  }
 
-  const factory UserModel({
-    // --- LOGIN IDENTITY ---
-    @Default(-1) int id,
-    @Default('') String username,
-    @Default('') String email,
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'username': username,
+      'email': email,
+      'accessToken': accessToken,
+      'refreshToken': refreshToken,
+      'message': message,
+    };
+  }
 
-    // --- SESSION MANAGEMENT ---
-    @JsonKey(name: 'accessToken') @Default('') String accessToken,
-    @JsonKey(name: 'refreshToken') @Default('') String refreshToken,
-
-    // --- ERROR HANDLING ---
-    @Default('') String message,
-  }) = _UserModel;
-
-  factory UserModel.fromJson(Map<String, Object?> json) =>
-      _$UserModelFromJson(json);
-
-  // Helper getters
-  bool get isAuthenticated => accessToken.isNotEmpty;
-  bool get hasError => message.isNotEmpty;
+  // Optional: Mapper to easily convert Entity back to Model if needed
+  factory UserModel.fromEntity(UserEntity entity) {
+    return UserModel(
+      id: entity.id,
+      username: entity.username,
+      email: entity.email,
+      accessToken: entity.accessToken,
+      refreshToken: entity.refreshToken,
+      message: entity.message,
+    );
+  }
 }

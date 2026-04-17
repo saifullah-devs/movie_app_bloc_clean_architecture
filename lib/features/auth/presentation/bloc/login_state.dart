@@ -5,12 +5,14 @@ class LoginState extends Equatable {
   final String password;
   final String message;
   final PostApiStatus status;
+
   const LoginState({
-    this.email = 'emilys',
-    this.password = 'emilyspass',
+    this.email = '',
+    this.password = '',
     this.message = '',
     this.status = PostApiStatus.initial,
   });
+
   LoginState copyWith({
     String? email,
     String? password,

@@ -1,52 +1,66 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:movie_app_bloc/dependency_injection.dart';
 import 'package:movie_app_bloc/core/services/session_controller.dart';
-import 'package:movie_app_bloc/features/auth/data/repository/login_repository.dart';
 import 'package:movie_app_bloc/core/utils/enum.dart';
+
+import '../../data/usecases/login_usecase.dart';
+
 part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginRepository loginRepository = getIt<LoginRepository>();
+  final LoginUseCase _loginUseCase;
+  final SessionController _sessionController;
 
-  LoginBloc() : super(LoginState()) {
-    on<LoginEmailChanged>((event, emit) {
-      emit(state.copyWith(email: event.email));
-    });
-    on<LoginPasswordChanged>((event, emit) {
-      emit(state.copyWith(password: event.password));
-    });
+  LoginBloc({
+    required LoginUseCase loginUseCase,
+    required SessionController sessionController,
+  }) : _loginUseCase = loginUseCase,
+       _sessionController = sessionController,
+       super(const LoginState()) {
+    on<EmailChanged>(_onEmailChanged);
+    on<PasswordChanged>(_onPasswordChanged);
+    on<LoginSubmitted>(_onSubmitted);
+  }
+  void _onEmailChanged(EmailChanged event, Emitter<LoginState> emit) {
+    // Updates the email in the state and resets the status to initial
+    emit(state.copyWith(email: event.email, status: PostApiStatus.initial));
+  }
 
-    on<LoginSubmitted>((event, emit) async {
-      emit(state.copyWith(status: PostApiStatus.loading));
-      try {
-        final user = await loginRepository.login({
-          'username': state.email,
-          'password': state.password,
-        });
-        if (user.hasError) {
-          emit(
-            state.copyWith(status: PostApiStatus.error, message: user.message),
-          );
-        } else {
-          await SessionController().saveUserInPreferences(user);
-          await SessionController().getUserFromPreferences();
-          emit(
-            state.copyWith(
-              status: PostApiStatus.success,
-              message: user.accessToken,
-            ),
-          );
-        }
-      } catch (error) {
+  void _onPasswordChanged(PasswordChanged event, Emitter<LoginState> emit) {
+    // Updates the password in the state and resets the status to initial
+    emit(
+      state.copyWith(password: event.password, status: PostApiStatus.initial),
+    );
+  }
+
+  Future<void> _onSubmitted(
+    LoginSubmitted event,
+    Emitter<LoginState> emit,
+  ) async {
+    emit(state.copyWith(status: PostApiStatus.loading));
+
+    // Create the params object
+    final params = LoginParams(email: state.email, password: state.password);
+
+    try {
+      final user = await _loginUseCase(params);
+
+      if (user.hasError) {
+        emit(
+          state.copyWith(status: PostApiStatus.error, message: user.message),
+        );
+      } else {
+        await _sessionController.saveUserInPreferences(user);
         emit(
           state.copyWith(
-            status: PostApiStatus.error,
-            message: error.toString(),
+            status: PostApiStatus.success,
+            message: "Welcome back!",
           ),
         );
       }
-    });
+    } on Exception catch (e) {
+      emit(state.copyWith(status: PostApiStatus.error, message: e.toString()));
+    }
   }
 }

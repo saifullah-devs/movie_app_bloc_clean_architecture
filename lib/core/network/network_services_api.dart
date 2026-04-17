@@ -14,11 +14,26 @@ class NetworkServicesApi implements BaseApiServices {
     'Accept': 'application/json',
   };
 
+  // Inside NetworkServicesApi
+
   @override
-  Future<dynamic> getApi(String url) async {
-    return _processRequest(
-      () => http.get(Uri.parse(url), headers: _getHeaders()),
-    );
+  Future<dynamic> getApi(
+    String url, {
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    // 1. Parse the base URL once
+    Uri uri = Uri.parse(url);
+
+    // 2. If query parameters are provided, safely attach them
+    if (queryParameters != null && queryParameters.isNotEmpty) {
+      // Convert all values to strings as required by Uri.replace
+      final stringQueryParameters = queryParameters.map(
+        (key, value) => MapEntry(key, value.toString()),
+      );
+      uri = uri.replace(queryParameters: stringQueryParameters);
+    }
+
+    return _processRequest(() => http.get(uri, headers: _getHeaders()));
   }
 
   @override

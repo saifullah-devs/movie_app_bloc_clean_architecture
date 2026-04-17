@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app_bloc/core/config/routes/routes_name.dart';
+import 'package:movie_app_bloc/features/tv_show/domain/entities/tv_show_entity.dart';
 
 import '../../../features/view.dart';
 
@@ -23,18 +24,38 @@ class Routes {
         );
 
       case RoutesName.moviesScreen:
-        // 3. Extract the variables safely from the URL!
-        // If they aren't in the URL, provide safe default values.
-        final sortParam = uri.queryParameters['sort'] ?? 'popular';
         final pageParam = uri.queryParameters['page'] ?? '1';
 
-        // Convert the string page number to an integer safely
         final int pageNumber = int.tryParse(pageParam) ?? 1;
 
         return MaterialPageRoute(
           settings: settings,
           builder: (BuildContext context) =>
-              MovieScreen(sortMode: sortParam, initialPage: pageNumber),
+              TvShowScreen(initialPage: pageNumber),
+        );
+
+      case String path when path.startsWith(RoutesName.tvShowDetailScreen):
+        final segments = path.split('/');
+
+        String? permalink;
+        if (segments.length > 2) {
+          permalink = segments[2];
+        }
+
+        final showEntity = settings.arguments as TvShowEntity?;
+
+        if (showEntity != null) {
+          return MaterialPageRoute(
+            settings: settings,
+            builder: (_) => TvShowDetailScreen(show: showEntity),
+          );
+        }
+
+        return MaterialPageRoute(
+          builder: (_) => Scaffold(
+            appBar: AppBar(),
+            body: Center(child: Text('Deep linking to: $permalink')),
+          ),
         );
 
       case RoutesName.splashScreen:

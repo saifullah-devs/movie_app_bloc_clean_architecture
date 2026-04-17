@@ -1,0 +1,47 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Movie App (Web - No CORS)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "toolArgs": [
+                "--dart-define=API_KEY=530ff271de5acf4395484d2a87b938ca"
+            ],
+            "args": [
+                "--web-browser-flag",
+                "--disable-web-security"
+            ]
+        },
+        {
+            "name": "Movie App (Mobile/Emulator)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "toolArgs": [
+                "--dart-define=API_KEY=530ff271de5acf4395484d2a87b938ca"
+            ]
+        },
+        {
+            "name": "Movie App (Profile Mode)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "toolArgs": [
+                "--dart-define=API_KEY=530ff271de5acf4395484d2a87b938ca"
+            ],
+            "flutterMode": "profile"
+        },
+        {
+            "name": "Movie App (Release Mode)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "toolArgs": [
+                "--dart-define=API_KEY=530ff271de5acf4395484d2a87b938ca"
+            ],
+            "flutterMode": "release"
+        }
+    ]
+}
