@@ -2,6 +2,15 @@
 
 A high-performance, scalable Flutter application built with **Clean Architecture** and **BLoC**. This project serves as a showcase of industrial-standard software engineering, featuring a robust network layer, cross-platform adaptivity, and a focus on maintainable code.
 
+## 📱 Screenshots
+
+| Screen | Mobile View | Desktop View |
+| :--- | :---: | :---: |
+| **Home** | <img src="images/screenshots/home_screenshot_mobile.jpg" width="200" alt="CineFlow Home Screen Mobile"> | <img src="images/screenshots/home_screenshot_pc.png" width="450" alt="CineFlow Home Screen Desktop"> |
+| **Login** | <img src="images/screenshots/login_screenshot_mobile.jpg" width="200" alt="Login Screen Mobile"> | <img src="images/screenshots/login_screenshot_pc.png" width="450" alt="Login Screen Desktop"> |
+| **Details** | <img src="images/screenshots/tv_show_detail_mobile.jpg" width="200" alt="TV Show Details Mobile"> | <img src="images/screenshots/tv_show_detail_pc.png" width="450" alt="TV Show Details Desktop"> |
+| **Pagination** | <img src="images/screenshots/pagination_mobile.jpg" width="200" alt="Pagination and List View Mobile"> | <img src="images/screenshots/pagination_pc.png" width="450" alt="Pagination and List View Desktop"> |
+
 ## 🚀 Key Architectural Highlights
 
 * **Clean Architecture (Feature-First):** Strict separation of layers (Domain, Data, Presentation) to ensure the codebase is testable and scalable.
@@ -69,7 +78,6 @@ flutter run -d chrome --web-browser-flag "--disable-web-security"
 
 ## 📈 Engineering Growth Tracker
 
-* [x] Refactored from hardcoded strings to a centralized **Design System**.
 * [x] Implemented **Hero Animations** for professional-grade UX.
 * [x] Solved **CORS restrictions** for cross-platform web deployment.
 
